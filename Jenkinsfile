@@ -4,6 +4,8 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Running build automation'
+                echo credentialsId: 'webserver_login'
+                echo 'credential'
                 sh './gradlew build --no-daemon'
                 archiveArtifacts artifacts: 'dist/trainSchedule.zip'
             }
@@ -13,7 +15,7 @@ pipeline {
                 branch 'master'
             }
             steps {
-                echo webserver_login
+                
                 withCredentials([usernamePassword(credentialsId: 'webserver_login', usernameVariable: 'USERNAME', passwordVariable: 'USERPASS')]) {
                     sshPublisher(
                         failOnError: true,
